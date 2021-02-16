@@ -3,8 +3,10 @@ package com.example.authwithgoogle
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class Profile : AppCompatActivity() {
@@ -15,11 +17,14 @@ class Profile : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         var user = auth.currentUser
-
+        Picasso.with(this)
+                .load(user?.photoUrl)
+                .resize(500, 500)
+                .into(imageView)
         txtID.text = user?.uid
         txtEmail.text = user?.email
         txtName.text = user?.displayName
-
+        Log.d("ok", "url: "+ user?.photoUrl.toString())
         btnSignOut.setOnClickListener {
             signout()
         }
@@ -29,5 +34,6 @@ class Profile : AppCompatActivity() {
         Toast.makeText(this@Profile, "Sign Out!", Toast.LENGTH_SHORT).show()
         val intent = Intent(this@Profile, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }
